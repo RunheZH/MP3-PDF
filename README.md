@@ -1,10 +1,10 @@
 # MP3-PDF
-COMP 4905 Honours Project (Fall 2019)
-Author:     Runhe Zhong
+COMP 4905 Honours Project (Fall 2019)\
+Author:     Runhe Zhong\
 Student #:  101016659
 
 # Proposal - MP3 player/PDF viewer
-    11th September 2019
+Updated: 24 September 2019
 
 ## OVERVIEW
 The purpose of this project is to build an application,  which can combine the playback and PDF charts or chord sheets together. Users should be able to point at any part of the document and the corresponding music should resume playing from that point.
@@ -17,10 +17,10 @@ The purpose of this project is to build an application,  which can combine the p
 This project will be a node.js based web application, which combines playback with PDF documents. The tool that will be used is PDFtk for handling PDFs and SVG might be used for scores in this project. Users should be able to point at the chart and resume playing from that point using this application. Since this is a four-month individual project and I am also taking other courses simultaneously, the application won't be able to handle handwritten chord sheets. This feature might be implemented if I got some extra time after I finished the committed features.
 
 ## MILESTONES
-### Week 36 - Week 37 (Sept 3 - Sept 15)
-1. Doing some research and preparing the project proposal.
+### ~~Week 36 - Week 37 (Sept 3 - Sept 15)~~
+1. ~~Doing some research and preparing the project proposal.~~
 ### Week 38 - Week 39 (Sept 16 - Sept 29)
-_Sept 17 - Proposal submission deadline_
+~~_Sept 17 - Proposal submission deadline_~~
 1. Start thinking about how to implement the project
 2. Build a basic server and client web page
 3. Build a basic database
