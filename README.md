@@ -21,10 +21,11 @@ This project will be a node.js based web application, which combines playback wi
 1. ~~Doing some research and preparing the project proposal.~~
 ### Week 38 - Week 39 (Sept 16 - Sept 29)
 ~~_Sept 17 - Proposal submission deadline_~~
-1. Start thinking about how to implement the project
-2. Build a basic server and client web page
-3. Build a basic database
-4. Work on the mid-term report
+1. ~~Set up environment~~
+2. Start thinking about how to implement the project
+3. Build a basic server and client web page
+4. Build a basic database
+5. Work on the mid-term report
 ### Week 40 - Week 41 (Sept 30 - Oct 13)
 1. Be able to point at the document and send the coordinates to the server
 2. "Learning" how the playback and the PDF document correspond
