@@ -1,0 +1,25 @@
+{
+  "name": "mp3-pdf",
+  "version": "1.0.0",
+  "description": "COMP 4905 Honours Project [Fall-2019]",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RunheZH/MP3-PDF.git"
+  },
+  "author": "Runhe Zhong #101016659",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RunheZH/MP3-PDF/issues"
+  },
+  "homepage": "https://github.com/RunheZH/MP3-PDF#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "morgan": "^1.9.1",
+    "sqlite3": "^4.1.0"
+  }
+}
