@@ -14,6 +14,12 @@ db.serialize(function () {
     db.run(sqlString);
     sqlString = "INSERT OR REPLACE INTO users VALUES ('user', 'password')";
     db.run(sqlString);
+
+    //add some music into the database.
+    sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT)";
+    db.run(sqlString);
+    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf')"
+    db.run(sqlString);
 });
 
 exports.authenticate = function (request, response, next) {
@@ -123,7 +129,7 @@ exports.users = function (request, response) {
 // TODO
 exports.musics = function (request, response) {
     // musics.html
-    db.all("SELECT id, music_name FROM musics", function (err, rows) {
+    db.all("SELECT musicid, pdfdoc FROM musics", function (err, rows) {
         response.render('musics', { title: 'Musics:', musicEntries: rows });
     })
 

@@ -7,11 +7,12 @@ http://localhost:3000/users
 
 var express = require('express');
 var exphbs  = require('express-handlebars');
-//var path = require('path');
+var path = require('path');
 //var favicon = require('serve-favicon');
 var logger = require('morgan');
 
 var app = express(); //create express middleware dispatcher
+console.log(__dirname);
 
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = ['/'];
@@ -33,12 +34,13 @@ function methodLogger(request, response, next) {
     console.log("URL:" + request.url);
     next(); //call next middleware registered
 }
+/*
 function headerLogger(request, response, next) {
     console.log("HEADER LOGGER:")
     console.log("Headers:")
     for (k in request.headers) console.log(k);
     next(); //call next middleware registered
-}
+}*/
 
 //register middleware with dispatcher
 //ORDER MATTERS HERE
@@ -47,12 +49,13 @@ app.use(routes.authenticate); //authenticate user
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(methodLogger);
+app.use(express.static(__dirname + '/public'));
 //routes
 app.get(ROOT_DIR, routes.index);
 app.get('/index.html', routes.index);
 //app.get('/find', routes.find);
 app.get('/users', routes.users);
-//app.get('/musics/*', routes.musicDetails);
+app.get('/musics', routes.musics);
 app.post('/*', routes.index);
 
 //start server
