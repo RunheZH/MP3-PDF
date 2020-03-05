@@ -1,6 +1,14 @@
-{{title}}
-
 {{#each musicEntries}}
-<p>MusicId: {{this.musicid}} PDF:</p>
-<embed src="{{this.pdfdoc}}" type="application/pdf" width="80%" height="800px">
+<p>{{this.musicid}}</p>
+<audio id="audio" controls preload="auto">
+    <source src="{{this.mp3addr}}" type="audio/mpeg">
+    Your browser does not support HTML5 MP3.
+</audio>
+
+<div id="music_score">
+    <p>PDF:</p>
+    <image id="score_sheet" src="{{this.jpg}}" type="application/jpg"></image>
+    <script src="/logic/pdf_interaction.js"></script>
+</div>
 {{/each}}
+

@@ -12,7 +12,6 @@ var path = require('path');
 var logger = require('morgan');
 
 var app = express(); //create express middleware dispatcher
-console.log(__dirname);
 
 const PORT = process.env.PORT || 3000
 const ROOT_DIR = ['/'];
