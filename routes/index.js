@@ -4,6 +4,12 @@ var qstring = require('querystring');
 var sqlite3 = require('sqlite3').verbose(); //verbose provides more detailed stack trace
 var db = new sqlite3.Database('data/musics.db');
 
+// pdfkit related
+var PDFDocument = require('pdfkit');
+var doc = new PDFDocument();
+var fs = require('fs');
+
+
 db.serialize(function () {
     //make sure a couple of users exist in the database.
     var sqlString = "CREATE TABLE IF NOT EXISTS users (userid TEXT PRIMARY KEY, password TEXT)";
@@ -16,9 +22,9 @@ db.serialize(function () {
     db.run(sqlString);
 
     //add some music into the database.
-    sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT)";
+    sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT, mp3addr TEXT, jpg TEXT)";
     db.run(sqlString);
-    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf')"
+    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf', 'mp3/twinkle_twinkle_little_star.mp3', 'jpg/twinkle_twinkle_little_star.jpg')";
     db.run(sqlString);
 });
 
@@ -98,8 +104,6 @@ function addFooter(request, response) {
 
 }
 
-
-
 exports.index = function (request, response) {
     // index.html
     response.render('index', { title: 'COMP 4905', body: 'rendered with handlebars' });
@@ -113,7 +117,6 @@ function parseURL(request, response) {
     console.log(urlObj.path);
     console.log('query:');
     console.log(urlObj.query);
-    //for(x in urlObj.query) console.log(x + ': ' + urlObj.query[x]);
     return urlObj;
 
 }
@@ -126,10 +129,9 @@ exports.users = function (request, response) {
 
 }
 
-// TODO
 exports.musics = function (request, response) {
     // musics.html
-    db.all("SELECT musicid, pdfdoc FROM musics", function (err, rows) {
+    db.all("SELECT * FROM musics", function (err, rows) {
         response.render('musics', { title: 'Musics:', musicEntries: rows });
     })
 

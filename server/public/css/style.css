@@ -1,0 +1,20 @@
+#music_score {
+     position: absolute;
+     height: 100%;
+     width: 80%;
+}
+
+#score_sheet {
+     top: 0px;
+     left: 0px;
+     position: absolute;
+}
+
+.clickable {
+     background-color: blue;
+     position: absolute;
+}
+
+.clickable:hover {
+     background-color: red;
+}
