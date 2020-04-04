@@ -1,31 +1,96 @@
-function addAClickable(parentId, elementId, top_pos, left_pos, height, width) {
-    // get the click position: 
+num_clickables = 0
+
+function addAMeasure() {
+    addAJQResizable('measures', num_clickables);
+    num_clickables += 1;
+}
+
+function removeAMeasure() {
+    if (num_clickables > 0) {
+        num_clickables -= 1;
+        var element = document.getElementById("measure" + num_clickables);
+        document.getElementById('measures').removeChild(element);
+    }
+}
+
+function addAJQResizable(parentId, elementId) {
     var parent = document.getElementById(parentId);
     var newElement = document.createElement("div");
-    newElement.className = "clickable";
-    newElement.id = "sub" + elementId;
-    newElement.style.cssText = "height:" + height + "px; width:" + width + "px;" +
-    "top:" + top_pos + "px; left:" + left_pos + "px;";
-    newElement.onclick = function (e) { getClickPos(e, elementId)};
+    newElement.className = "draggable";
+    newElement.id = "measure" + elementId;
     parent.appendChild(newElement);
+
+    $(function () {
+        $(".draggable").draggable();
+        $(".draggable").resizable();
+    });
 }
 
-function getClickPos (e, id) {
-    var mp3 = document.getElementById('audio');
-    mp3.currentTime = (id) * (mp3.duration / 12);
-    mp3.play();
-    //console.log(id);
-    //console.log(e.offsetX, e.offsetY);
+function confirmMeasuresPos () {
+    $(function () {
+        $(".draggable").draggable('disable');
+        $(".draggable").resizable('disable');
+    });
 }
 
+function editMeasuresPos() {
+    $(function () {
+        $(".draggable").draggable('enable');
+        $(".draggable").resizable('enable');
+    });
+}
 
-// TODO: hardcoded for now
-pos_x = 0;
-pos_y = 0;
-for (var i = 0; i < 12; i ++) {
-    if (i % 4 == 0) {
-        pos_x += 200;
-        pos_y = 0;
+function goToLearning() {
+    confirmMeasuresPos();
+    document.getElementById('audio').pause();
+    document.getElementById("set_measure").style.display = 'none';
+    document.getElementById("learning").style.display = 'initial';
+    document.getElementById("playing").style.display = 'none';
+}
+
+function goToSetting() {
+    document.getElementById('audio').pause();
+    document.getElementById("set_measure").style.display = 'initial';
+    document.getElementById("learning").style.display = 'none';
+    document.getElementById("playing").style.display = 'none';
+}
+
+function goToPlaying() {
+    document.getElementById('audio').pause();
+    document.getElementById("set_measure").style.display = 'none';
+    document.getElementById("learning").style.display = 'none';
+    document.getElementById("playing").style.display = 'initial';
+
+    parent = document.getElementById('measures');
+    measures = parent.childNodes;
+
+    for (var i = 0; i < measures.length; i++) {
+        child_id = measures[i].id;
+        measures[i].onclick = (function (id) {
+            return function () {
+            var mp3 = document.getElementById('audio');
+            child = document.getElementById(id);
+            mp3.currentTime = child.play_time;
+            mp3.play(); }})(child_id);
     }
-    addAClickable('music_score', i, pos_x, pos_y + i % 4 * 200, 200, 200);
+
+    $('.draggable').css({ border: 'transparent' });
+}
+
+function startLearning() {
+    document.getElementById('audio').pause();
+    var mp3 = document.getElementById('audio');
+    mp3.currentTime = 0;
+    mp3.play();
+
+    var parent = document.getElementById('measures');
+    children = parent.childNodes;
+    for (var i = 0; i < children.length; i ++) {
+        child_id = children[i].id
+        children[i].onclick = (function (id) {
+            return function() {
+            var mp3 = document.getElementById('audio');
+            child = document.getElementById(id);
+            child.play_time = mp3.currentTime; }})(child_id);
+    }
 }

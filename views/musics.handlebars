@@ -1,14 +1,47 @@
 {{#each musicEntries}}
-<p>{{this.musicid}}</p>
 <audio id="audio" controls preload="auto">
     <source src="{{this.mp3addr}}" type="audio/mpeg">
     Your browser does not support HTML5 MP3.
 </audio>
-
+<div id="interact">
+    <div id="set_measure">
+        <button type="button" onclick="addAMeasure()">
+            Add a measure
+        </button>
+        <button type="button" onclick="removeAMeasure()">
+            Remove a measure
+        </button>
+        <button type="button" onclick="confirmMeasuresPos()">
+            Confirm
+        </button>
+        <button type="button" onclick="editMeasuresPos()">
+            Edit
+        </button>
+        <button type="button" onclick="goToLearning()">
+            NEXT: Learning
+        </button>
+        <script src="/logic/pdf_interaction.js"></script>
+    </div>
+    <div id="learning" style="display: none;">
+        <button type="button" onclick="goToSetting()">
+            PREVIOUS: Setting up
+        </button>
+        <button type="button" onclick="setTimeout(startLearning, 3000)">
+            Start learning
+        </button>
+        <button type="button" onclick="goToPlaying()">
+            NEXT: Playing
+        </button>
+    </div>
+    <div id="playing" style="display: none;">
+        <button type="button" onclick="goToLearning()">
+            PREVIOUS: Learning
+        </button>
+    </div>
+</div>
 <div id="music_score">
-    <p>PDF:</p>
-    <image id="score_sheet" src="{{this.jpg}}" type="application/jpg"></image>
-    <script src="/logic/pdf_interaction.js"></script>
+    <image id="score_sheet" src="{{this.jpg}}" type="application/jpg" style="pointer-events:none;"></image>
+    <div id="measures"></div>
 </div>
 {{/each}}
 
