@@ -45,7 +45,7 @@ function headerLogger(request, response, next) {
 //ORDER MATTERS HERE
 //middleware
 app.use(routes.authenticate); //authenticate user
-app.use(favicon(path.join(__dirname, '/public', '/resources/favicon.png')));
+app.use(favicon(path.join(__dirname, '/public', '/resources/favicon.jpg')));
 app.use(logger('dev'));
 app.use(methodLogger);
 app.use(express.static(__dirname + '/public'));
