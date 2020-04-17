@@ -9,7 +9,7 @@ var express = require('express');
 var exphbs  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var logger = require('morgan'); 
 
 var app = express(); //create express middleware dispatcher
 
@@ -45,7 +45,7 @@ function headerLogger(request, response, next) {
 //ORDER MATTERS HERE
 //middleware
 app.use(routes.authenticate); //authenticate user
-app.use(favicon(path.join(__dirname, '/public', '/favicon1.png')));
+app.use(favicon(path.join(__dirname, '/public', '/resources/favicon.png')));
 app.use(logger('dev'));
 app.use(methodLogger);
 app.use(express.static(__dirname + '/public'));
@@ -54,7 +54,12 @@ app.get(ROOT_DIR, routes.index);
 app.get('/index.html', routes.index);
 //app.get('/find', routes.find);
 app.get('/users', routes.users);
-app.get('/musics', routes.musics);
+app.post('/musics/fileupload', routes.fileupload);
+app.post('/musics/audioupload', routes.audioupload);
+app.post('/musics/csvupload', routes.csvupload);
+app.get('/musics', routes.learn);
+app.get('/musics/search', routes.search);
+app.get('/musics/learn', routes.learn);
 app.post('/*', routes.index);
 
 //start server

@@ -1,0 +1,20 @@
+{{#each musicEntries}}
+<script src="/logic/pdf_interaction.js"></script>
+<form action="search">
+    <input type="text" placeholder="Search.." name="search">
+    <input class="search_button" type="image" alt="submit" src="../resources/search_icon.svg"><i class="search"></i></button>
+</form>
+<form id="learn_form" action="learn">
+    <input type="hidden" name="music_id" value="{{this.musicid}}"></input>
+    <button type="submit">LEARN</button>
+</form>
+<audio id="audio" controls preload="auto">
+    <source src="{{this.mp3addr}}" type="audio/mpeg">
+    Your browser does not support HTML5 MP3.
+</audio>
+<div id="music_score">
+    <image id="score_sheet" src="{{this.img}}" type="application/jpg" style="pointer-events:none;"></image>
+    <div id="measures"></div>
+    <script csv="{{this.csv}}">loadCSV()</script>
+</div>
+{{/each}}
