@@ -1,0 +1,67 @@
+{{#each musicEntries}}
+<script src="/logic/pdf_interaction.js"></script>
+<form action="search">
+    <input type="text" placeholder="Search.." name="search">
+    <input class="search_button" type="image" alt="submit" src="../resources/search_icon.svg"><i class="search"></i></button>
+</form>
+<form action="fileupload" method="post" enctype="multipart/form-data">
+    Select a music score sheet to upload (.jpeg, .jpg, or .png):
+    <input type="file" name="fileToUpload" id="fileToUpload" accept="image/png, image/jpeg, image/jpg">
+    <input type="submit" value="Upload Image" name="submit">
+</form>
+<form action="audioupload" method="post" enctype="multipart/form-data">
+    Select the corresponding audio to upload (.mp3):
+    <input type="file" name="audioToUpload" id="audioToUpload" accept="audio/mp3">
+    <input type="submit" value="Upload Audio" name="submit">
+</form>
+<audio id="audio" controls preload="auto">
+    <source src="{{this.mp3addr}}" type="audio/mpeg">
+    Your browser does not support HTML5 MP3.
+</audio>
+<div id="interact">
+    <div id="set_measure">
+        <button type="button" onclick="addAMeasure()">
+            Add a measure
+        </button>
+        <button type="button" onclick="removeAMeasure()">
+            Remove a measure
+        </button>
+        <button type="button" onclick="confirmMeasuresPos()">
+            Confirm
+        </button>
+        <button type="button" onclick="editMeasuresPos()">
+            Edit
+        </button>
+        <button type="button" onclick="goToLearning()">
+            NEXT: Learning
+        </button>
+    </div>
+    <div id="learning" style="display: none;">
+        <button type="button" onclick="goToSetting()">
+            PREVIOUS: Setting up
+        </button>
+        <button type="button" onclick="startLearning()">
+            Start learning
+        </button>
+        <button type="button" onclick="goToPlaying()">
+            NEXT: Playing
+        </button>
+    </div>
+    <div id="playing" style="display: none;">
+        <button type="button" onclick="goToLearning()">
+            PREVIOUS: Learning
+        </button>
+        <button id="export_button" onclick="exportMeasures()" value="{{this.musicid}}">EXPORT</button>
+        <form action="csvupload" method="post" enctype="multipart/form-data">
+        Upload the .csv file (.csv):
+        <input type="file" name="csvToUpload" id="csvToUpload" accept=".csv">
+        <input type="submit" value="Upload CSV & See final result" name="submit">
+        </form>
+    </div>
+</div>
+<div id="music_score">
+    <image id="score_sheet" src="{{this.img}}" type="application/jpg" style="pointer-events:none;"></image>
+    <div id="measures"></div>
+</div>
+{{/each}}
+

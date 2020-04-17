@@ -3,12 +3,8 @@ var url = require('url');
 var qstring = require('querystring');
 var sqlite3 = require('sqlite3').verbose(); //verbose provides more detailed stack trace
 var db = new sqlite3.Database('data/musics.db');
-
-// pdfkit related
-var PDFDocument = require('pdfkit');
-var doc = new PDFDocument();
+var formidable = require('formidable');
 var fs = require('fs');
-
 
 db.serialize(function () {
     //make sure a couple of users exist in the database.
@@ -22,9 +18,9 @@ db.serialize(function () {
     db.run(sqlString);
 
     //add some music into the database.
-    sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT, mp3addr TEXT, jpg TEXT)";
+    sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT, mp3addr TEXT, img TEXT, csv TEXT)";
     db.run(sqlString);
-    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf', 'mp3/twinkle_twinkle_little_star.mp3', 'jpg/twinkle_twinkle_little_star.jpg')";
+    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf', 'mp3/twinkle_twinkle_little_star.mp3', 'img/twinkle_twinkle_little_star.jpg', NULL)";
     db.run(sqlString);
 });
 
@@ -129,24 +125,95 @@ exports.users = function (request, response) {
 
 }
 
-exports.musics = function (request, response) {
-    // musics.html
-    db.all("SELECT * FROM musics", function (err, rows) {
-        response.render('musics', { title: 'Musics:', musicEntries: rows });
+exports.learn = function (request, response) {
+    // learn.html
+
+    var urlObj = parseURL(request, response);
+
+    if (urlObj.query.music_id) {
+        music_id = urlObj.query.music_id;
+    }
+    else {
+        music_id = "twinkle_twinkle_little_star";
+    }
+
+    var sql = "SELECT * FROM musics WHERE musicid='" + music_id + "'";
+
+    db.all(sql, function (err, rows) {
+        response.render('learn', { title: 'Musics:', musicEntries: rows });
     })
 
 }
 
-// TODO
-exports.find = function (request, response) {
-    // find.html
-    console.log("RUNNING FIND MUSICS");
+exports.search = function (request, response) {
 
     var urlObj = parseURL(request, response);
 
-    var sql = "SELECT id, music_name FROM musics";
+    var sql = "SELECT * FROM musics WHERE musicid='" + urlObj.query.search + "'";
 
     db.all(sql, function (err, rows) {
-        response.render('musics', { title: 'Musics:', musicEntries: rows });
+        if (rows.length == 0) {
+            response.render('index', { title: 'Hello', body: 'Could not find music sheet with music id = ' + urlObj.query.search })
+        }
+        else {
+            response.render('play', { title: 'Musics:', musicEntries: rows })
+        }
+    });
+}
+
+exports.fileupload = function (request, response) {
+    var form = new formidable.IncomingForm();
+    form.parse(request, function (err, fields, files) {
+        var oldpath = files.fileToUpload.path;
+        var newpath = __dirname + "/../server/public/musics/img/" + files.fileToUpload.name;
+        var fileName = files.fileToUpload.name.split('.')[0];
+        
+        fs.rename(oldpath, newpath, function (err) {
+            if (err) throw err;
+            sqlString = "INSERT OR REPLACE INTO musics VALUES ('" + fileName + "', NULL, NULL, 'img/" + files.fileToUpload.name + "', NULL)";
+            db.run(sqlString);
+            //response.write('File uploaded!');
+            db.all("SELECT * FROM musics WHERE musicid=\"" + fileName + "\"", function (err, rows){
+                response.render('learn', {title: 'Musics:', musicEntries: rows});
+            });
+        });
+    });
+}
+
+exports.audioupload = function (request, response) {
+    var form = new formidable.IncomingForm();
+    form.parse(request, function (err, fields, files) {
+        var oldpath = files.audioToUpload.path;
+        var newpath = __dirname + "/../server/public/musics/mp3/" + files.audioToUpload.name;
+        var audioName = files.audioToUpload.name.split('.')[0];
+
+        fs.rename(oldpath, newpath, function (err) {
+            if (err) throw err;
+            sqlString = "UPDATE musics SET mp3addr='mp3/" + files.audioToUpload.name + "' WHERE musicid='" + audioName + "'";
+            db.run(sqlString);
+            //response.write('File uploaded!');
+            db.all("SELECT * FROM musics WHERE musicid=\"" + audioName + "\"", function (err, rows) {
+                response.render('learn', { title: 'Musics:', musicEntries: rows });
+            });
+        });
+    });
+}
+
+exports.csvupload = function (request, response) {
+    var form = new formidable.IncomingForm();
+    form.parse(request, function (err, fields, files) {
+        var oldpath = files.csvToUpload.path;
+        var newpath = __dirname + "/../server/public/musics/csv/" + files.csvToUpload.name;
+        var csvName = files.csvToUpload.name.split('.')[0];
+
+        fs.rename(oldpath, newpath, function (err) {
+            if (err) throw err;
+            sqlString = "UPDATE musics SET csv='csv/" + files.csvToUpload.name + "' WHERE musicid='" + csvName + "'";
+            db.run(sqlString);
+            //response.write('File uploaded!');
+            db.all("SELECT * FROM musics WHERE musicid=\"" + csvName + "\"", function (err, rows) {
+                response.render('play', { title: 'Musics:', musicEntries: rows });
+            });
+        });
     });
 }
