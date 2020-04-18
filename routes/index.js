@@ -20,7 +20,7 @@ db.serialize(function () {
     //add some music into the database.
     sqlString = "CREATE TABLE IF NOT EXISTS musics (musicid TEXT PRIMARY KEY, pdfdoc TEXT, mp3addr TEXT, img TEXT, csv TEXT)";
     db.run(sqlString);
-    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf', 'mp3/twinkle_twinkle_little_star.mp3', 'img/twinkle_twinkle_little_star.jpg', NULL)";
+    sqlString = "INSERT OR REPLACE INTO musics VALUES ('twinkle_twinkle_little_star', 'pdf/twinkle_twinkle_little_star.pdf', 'mp3/twinkle_twinkle_little_star.mp3', 'img/twinkle_twinkle_little_star.jpg', 'csv/twinkle_twinkle_little_star.csv')";
     db.run(sqlString);
 });
 
